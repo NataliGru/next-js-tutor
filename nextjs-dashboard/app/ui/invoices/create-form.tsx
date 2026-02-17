@@ -1,16 +1,19 @@
-import { CustomerField } from '@/app/lib/definitions';
-import Link from 'next/link';
+import { CustomerField } from "@/app/lib/definitions";
+import Link from "next/link";
 import {
   CheckIcon,
   ClockIcon,
   CurrencyDollarIcon,
   UserCircleIcon,
-} from '@heroicons/react/24/outline';
-import { Button } from '@/app/ui/button';
+} from "@heroicons/react/24/outline";
+import { Button } from "@/app/ui/button";
+
+import { createInvoice } from '@/app/lib/actions';
+
 
 export default function Form({ customers }: { customers: CustomerField[] }) {
   return (
-    <form>
+    <form action={createInvoice}>
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
         {/* Customer Name */}
         <div className="mb-4">
@@ -98,6 +101,7 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
           </div>
         </fieldset>
       </div>
+
       <div className="mt-6 flex justify-end gap-4">
         <Link
           href="/dashboard/invoices"
@@ -105,6 +109,7 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
         >
           Cancel
         </Link>
+
         <Button type="submit">Create Invoice</Button>
       </div>
     </form>
