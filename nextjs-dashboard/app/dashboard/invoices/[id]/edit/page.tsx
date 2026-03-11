@@ -3,6 +3,41 @@ import Breadcrumbs from '@/app/ui/invoices/breadcrumbs';
 import { fetchInvoiceById, fetchCustomers } from '@/app/lib/data';
 import { notFound } from 'next/navigation';
 
+import type { Metadata, ResolvingMetadata } from 'next'
+ 
+type Props = {
+  params: Promise<{ id: string }>
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}
+ 
+export async function generateMetadata(
+  { params, searchParams }: Props,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  // read route params
+  const { id } = await params
+ 
+  // fetch data
+  const invoice = await fetchInvoiceById(id);
+ 
+  // optionally access and extend (rather than replace) parent metadata
+  const previousImages = (await parent).openGraph?.images || []
+
+  if (!invoice) {
+    return {
+      title: 'Invoice not found',
+    };
+  }
+ 
+  return {
+    title: `Edit Invoice #${invoice.id}`,
+    description: `Edit invoice for ${invoice.id ?? 'customer'}`,
+    openGraph: {
+      images: ['/some-specific-page-image.jpg', ...previousImages],
+    },
+  };
+}
+ 
  
 export default async function Page(props: {params: Promise<{id: string}> }) {
   const params = await props.params;
